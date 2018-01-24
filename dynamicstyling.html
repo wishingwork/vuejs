@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>VueJS</title>
+	<link rel="stylesheet" type="text/css" href="">
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- click the block and change color -->
+		<div class="demo" @click="attachRed = !attachRed" :class="{red: attachRed}"></div>
+		<!-- bind with css class "blue" -->
+		<div class="demo" :class="{blue: attachRed}"></div>
+		<!-- bind with computed function -->
+		<div class="demo" :class="divClasses"></div>
+		<!-- use input textbox to control the color -->
+		<div class="demo" :class="[inputColor, {red: attachRed}]"></div>
+		<!-- bind stlye with input textbox -->
+		<!-- backgroundColor can be 'background-color' -->
+		<div class="demo" :style="{backgroundColor: inputColor}"></div>
+		<div class="demo" :style="myStyle"></div>
+		<div class="demo" :style="[myStyle, {height: inputWidth + 'px'}]"></div>
+		<hr>
+		<input type="text" v-model="inputColor">
+		<input type="text" v-model="inputWidth">
+	</div>
+
+<script>
+new Vue({
+  // el points out which html block is applying Vue instance
+  el:'#app',
+  data:{
+  	attachRed: false,
+  	inputColor: 'green',
+  	inputWidth: 100
+  },
+  computed:{
+  	divClasses: function() {
+  		return {
+  			red: this.attachRed,
+  			blue: !this.attachRed
+  		}
+  	},
+  	myStyle: function(){
+  		return {
+  			backgroundColor: this.inputColor,
+  			width: this.inputWidth + 'px'
+  		}
+  	}
+  }
+});	
+</script>
+
+<style scoped>
+  .demo {
+    width: 100px;
+    height: 100px;
+    background-color: gray;
+    display: inline-block;
+    margin: 10px;
+  }
+
+  .red {
+  	background-color: red;
+  }
+  .green {
+  	background-color: green;
+  }
+  .blue {
+  	background-color: blue;
+  }  
+</style>
+
+</body>
+</html>

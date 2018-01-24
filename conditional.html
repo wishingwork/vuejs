@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>VueJS</title>
+	<link rel="stylesheet" type="text/css" href="">
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- CONDITION -->
+		<!-- v-if is totally removing an elmeent not just hide -->
+		<p v-if="show">You can see me!</p>
+		<p v-else>Now you see me!</p>
+		<!-- template can group elements for if condition -->
+		<template v-if="show">
+			<h1>Heading</h1>
+			<p>Inside a template</p>
+		</template>
+		<!-- v-show will hide element not detach elements -->
+		<p v-show="show">Do you also see me?</p>
+		<button @click="show = !show">Switch</button>
+
+		<!-- LOOP -->
+		<ul>
+			<!-- v-for is loop -->
+			<li v-for="ing in ingredients">{{ing}}</li>
+			<!-- the first variable is elements, and the second is indexes -->
+			<li v-for="(ing, i) in ingredients">{{ ing }} ({{ i }})</li>
+		</ul>
+		<button @click="ingredients.push('spicies')">Add me</button>
+		<!-- template tag grouping the for loop elements -->
+		<template v-for="(ing, index) in ingredients">
+			<h1>{{ing}}</h1>
+			<p>{{index}}</p>
+		</template>
+		<!-- loop for object and show the keys and indexes -->
+		<ul>
+			<li v-for="person in persons">
+				<div v-for="(value, key, index) in person">
+					{{key}}: {{value}} ({{index}})
+				</div>
+			</li>
+		</ul>
+		<span v-for="n in 10">{{n}}</span>
+	</div>		
+<script>
+new Vue({
+  // el points out which html block is applying Vue instance
+  el:'#app',
+  data:{
+  	show: true,
+  	ingredients: ['fruit', 'meat', 'cookies'],
+  	persons: [
+  		{name: 'Max', age: 27, color: 'red'},
+  		{name: 'Anna', age: 'unknown', color: 'blue'}
+  	]
+  }
+});	
+</script>		
+</body>
+</html>

@@ -10,17 +10,46 @@
 <body>
 
 <div id="app">
+	<!-- v-on:input binds with changeTitle method but the "sayHello()" runs stopping the change... -->
+	<!-- When sayHello() methods runs, the title value -->
 	<input type="text" v-on:input="changeTitle">
-	<!-- v-once keeps data property from rerendering -->
+	<!-- v-once keeps data property from rerendering becomes unchangable -->
 	<p v-once> {{ title }}</p> 
-	<p>{{ title }}</p>
-	<!-- v-bind allows data property applied in template's html attribute -->
-	<p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
-	<hr>
+	<p>{{ title }}</p>	
+	<!-- v-bind (:) -->
+	<!-- v-bind allows data property applied in template's html attribute -->	
+	<p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>	
 	<!-- v-html implements html code from data property -->
-	<p v-html="finishedLink"></p>
+	HTML<p v-html="finishedLink"></p>
+
+	<hr>
+	<!-- v-on: (@)-->
+	<!-- v-on is listening to the template to Vue script function -->
 	<button v-on:click="increase">Click</button>
+	<!-- Add another augument to menthod -->
+	<button v-on:click="increase2(2, $event)">Click for 2</button>
+	<button v-on:click="counter++">Click for 1</button>
 	<p>{{ counter }}</p>
+	<p>{{ counter * 2 > 10 ? 'Greater than 10' : 'Smaller than 10'}}</p>
+	<p v-on:mousemove="updateCoordinates">
+		Coordinate {{x}}/{{y}}
+		- <span v-on:mousemove="dummy">DEAD SPOT2</span>
+		- <span v-on:mousemove.stop="">DEAD SPOT</span>		
+	</p>
+	<!-- keyup.enter will constratin the function only triggered by pressing enter key -->
+	<input type="text" v-on:keyup.enter="alertMe">
+
+	<hr>
+	<!-- v-model grab data and update  -->
+	<input type="text" v-model="name">
+	<p>{{name}}</p>
+	<hr>
+	<!-- Computed -->
+	<button v-on:click="counter++">Increase</button>
+	<button v-on:click="counter--">Decrease</button>
+	<button v-on:click="secondCounter++">Second Counter</button>
+	<p>Counter: {{counter}} | {{secondCounter}}</p>
+	<p>Result: {{result()}} | {{output}}</p>
 </div>
 
 <script>
@@ -31,9 +60,32 @@ new Vue({
   	title: 'Helllo Worlds!',
   	link: 'http://google.com',
   	finishedLink: '<a href="http://google.com">Google</a>',
-  	counter: 0
+  	counter: 0,
+  	secondCounter: 0,
+  	x: 0,
+  	y: 0,
+  	name: 'John'
+  },
+  computed:{
+  	// computed is dependent properties in templates  (will not run the function contiuously)
+  	// computed the running time is synhronized
+  	output: function(){
+  		return this.counter > 5 ? 'Greater than 5' : 'Samller than 5';
+  	}
+  }, 
+  watch:{
+  	// Execute code upon data changes
+  	// Must match data name
+  	// watch running time is asynchronized
+  	counter: function(value) {
+  		var vm = this;
+  		setTimeout(function(){
+  			vm.counter = 0;
+  		}, 2000);
+  	}
   },
   methods:{
+  	// result methods will be trigger whenever one method is triggered
   	changeTitle: function(event) {
     	this.title = event.target.value;
 	  },
@@ -44,6 +96,22 @@ new Vue({
 	},
 	increase: function() {
 		this.counter++;
+	},
+	increase2: function(step, event) {
+		this.counter += 2;
+	},
+	updateCoordinates: function(event) {
+		this.x = event.clientX;
+		this.y = event.clientY;
+	},
+	dummy: function(event) {
+		event.stopPropagation();
+	},
+	alertMe: function(event) {
+		alert('alert!');
+	},
+	result: function(){
+		return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
 	}
   }
 });	
